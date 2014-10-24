@@ -28,6 +28,15 @@ public class PlayerResource {
 	public Player retrievePlayer(@PathParam("id") int id) {
 		return Player.retrieve(id);
 	}
+	
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_JSON)
+	public PlayerListWrapper retrievePlayers() {
+		PlayerListWrapper result = new PlayerListWrapper();
+		result.setPlayers(Player.retrieveAll());
+		return result;
+	}
 }
 
 

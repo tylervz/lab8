@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @XmlRootElement
@@ -60,6 +62,26 @@ public class Player {
 			if (resultSet.next()) {
 				result = new Player(resultSet.getInt(1), resultSet.getString(3),
 						resultSet.getString(2));
+			}
+			resultSet.close();
+			statement.close();
+			connection.close();
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return result;
+	}
+	
+	public static List<Player> retrieveAll() {
+		List<Player> result = new ArrayList<Player>();
+		try {
+			Class.forName("org.postgresql.Driver");
+			Connection connection = DriverManager.getConnection(DB_URI, DB_LOGINID, DB_PASSWORD);
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM Player");
+			while (resultSet.next()) {
+				result.add(new Player(resultSet.getInt(1), resultSet.getString(3), resultSet
+						.getString(2)));
 			}
 			resultSet.close();
 			statement.close();
